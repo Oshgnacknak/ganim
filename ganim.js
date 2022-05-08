@@ -3,6 +3,8 @@ Algebra(2, 0, 1, () => {
   const currentTime = () =>
     performance.now() / 1000;
     
+  const damping = 0.25;
+    
   let last = currentTime();
   let dt;
 
@@ -27,6 +29,7 @@ Algebra(2, 0, 1, () => {
 
     let desired = createMotor(position, target);
     motor = lerp(motor, desired, dt);
+    motor = lerp(motor, 1, damping);
     position = motor >>> position;
     
     last = now;
@@ -44,3 +47,4 @@ Algebra(2, 0, 1, () => {
     animate: true
   });
 });
+
