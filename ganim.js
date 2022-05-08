@@ -14,18 +14,19 @@ Algebra(2, 0, 1, () => {
     return m.Normalized;
   };
   
-  const lerp = (t, x) => 
-    (1 - t) + t * x;
+  const lerp = (x, y, t) => 
+    (1 - t) * x + t * y;
   
   let position = createPoint(-1, 1);
   let target = createPoint(1, -1);
-  
+  let motor = 1;
+
   return this.graph(() => {
     let now = currentTime();
     dt = now - last;
 
-    let motor = createMotor(position, target);
-    motor = lerp(dt, motor);
+    let desired = createMotor(position, target);
+    motor = lerp(motor, desired, dt);
     position = motor >>> position;
     
     last = now;
