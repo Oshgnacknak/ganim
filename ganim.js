@@ -1,9 +1,7 @@
 Algebra(2, 0, 1, () => {
-  
+
   const currentTime = () =>
     performance.now() / 1000;
-    
-  const damping = 0.25;
     
   let last = currentTime();
   let dt;
@@ -11,35 +9,44 @@ Algebra(2, 0, 1, () => {
   const createPoint = (x=0, y=0, z=0) =>
     !(x*1e1 + y*1e2 + z*1e3 + 1e0);
     
-  const createMotor = (from, to) => {
-    let m = 1 + (to / from);
-    return m.Normalized;
-  };
+  class State {
+    constructor() {
+      this.motor = 1;
+      this.vel = (1e1 - 0.11e0) ^ (1e2 - 0.17e0);
+    }
+    
+    render() {
+      return this.motor >>> createPoint();
+    }
+    
+    update(dt) {
+      const [dm, dv] = this.deriv();
+      this.motor = this.motor + dt * dm;
+      this.vel = this.vel + dt * dv;
+    }
+     
+    deriv() {
+      const B = this.vel;
+      return [
+        -0.5 * this.motor * this.vel,
+        -0.5*(B.Dual*B-B*B.Dual).UnDual
+      ];
+    }
+  }
   
-  const lerp = (x, y, t) => 
-    (1 - t) * x + t * y;
-  
-  let position = createPoint(-1, 1);
-  let target = createPoint(1, -1);
-  let motor = 1;
+  let state = new State();
 
   return this.graph(() => {
     let now = currentTime();
     dt = now - last;
 
-    let desired = createMotor(position, target);
-    motor = lerp(motor, desired, dt);
-    motor = lerp(motor, 1, damping);
-    position = motor >>> position;
-    
+    state.update(dt);
+
     last = now;
     
     return [
       0x00ff00,
-      position, "position",
-      
-      0xff0000,
-      target, "target"
+      state.render(), "state"
     ];
   }, {
     lineWidth: 4,
@@ -47,4 +54,3 @@ Algebra(2, 0, 1, () => {
     animate: true
   });
 });
-
