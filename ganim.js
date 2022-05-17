@@ -12,11 +12,17 @@ Algebra(2, 0, 1, () => {
   class State {
     constructor() {
       this.motor = 1;
-      this.vel = (1e1 - 0.11e0) ^ (1e2 - 0.17e0);
+      this.vel = (1e1 - 0e0) ^ (1e2 - 3e0);
     }
     
     render() {
       return this.motor >>> createPoint();
+    }
+    
+    forques() {
+      const gravity = !(~this.motor >>> -9.81e02);
+      const damping = !(-0.25 * this.vel);
+      return gravity + damping;
     }
     
     update(dt) {
@@ -29,7 +35,7 @@ Algebra(2, 0, 1, () => {
       const B = this.vel;
       return [
         -0.5 * this.motor * this.vel,
-        -0.5*(B.Dual*B-B*B.Dual).UnDual
+        (this.forques() - 0.5 * (B.Dual*B - B*B.Dual)).UnDual
       ];
     }
   }
