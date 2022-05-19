@@ -9,13 +9,16 @@ Algebra(2, 0, 1, () => {
   const createPoint = (x=0, y=0, z=0) =>
     !(x*1e1 + y*1e2 + z*1e3 + 1e0);
     
-  class State {
+  const innerProduct = (a, b) =>
+    0.5 * (a*b + b*a).Dual.s;
+    
+  class Particle {
     constructor() {
       this.motor = 1;
       this.vel = (1e1 - 0e0) ^ (1e2 - 3e0);
     }
     
-    render() {
+    positon() {
       return this.motor >>> createPoint();
     }
     
@@ -40,19 +43,43 @@ Algebra(2, 0, 1, () => {
     }
   }
   
-  let state = new State();
+  class Wall {
+    constructor() {
+      this.theWall = 1e2 + 1e0;
+    }
+    
+    render() {
+      return this.theWall;
+    }
+    
+    bounce(particle) {
+      let pos = particle.positon();
+      let cmp = innerProduct(pos, this.theWall);
+      
+      if (cmp < 0) {
+
+      }
+    }
+  }
+  
+  let particle = new Particle();
+  let wall = new Wall();
 
   return this.graph(() => {
     let now = currentTime();
     dt = now - last;
 
-    state.update(dt);
+    wall.bounce(particle);
+    particle.update(dt);
 
     last = now;
     
     return [
       0x00ff00,
-      state.render(), "state"
+      particle.positon(),
+      
+      0xff0000,
+      wall.render()
     ];
   }, {
     lineWidth: 4,
@@ -60,3 +87,4 @@ Algebra(2, 0, 1, () => {
     animate: true
   });
 });
+
