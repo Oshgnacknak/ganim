@@ -56,8 +56,8 @@ Algebra(2, 0, 1, () => {
       let pos = particle.positon();
       let cmp = innerProduct(pos, this.theWall);
       
-      if (cmp < 0) {
-
+      if (cmp <= 0) {
+        particle.vel = this.theWall >>> particle.vel;
       }
     }
   }
