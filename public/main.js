@@ -1,67 +1,71 @@
-// import Algebra from './algebra.js';
+import Algebra, { createPoint, innerProduct } from './algebra.js';
 
-const createCanvas = () => 
-    Algebra(2, 0, 1, () => {
-
-      const currentTime = () =>
-        performance.now() / 1000;
-        
-      let last = currentTime();
-      let dt;
-
-      const createPoint = (x=0, y=0, z=0) =>
-        !(x*1e1 + y*1e2 + z*1e3 + 1e0);
-
-      
-      const innerProduct = (a, b) =>
-        0.5 * (a*b + b*a).Dual.s;
-      
-      let point = createPoint();
-      
-      let angle = 0;
-
-      return this.graph(() => {
-        let now = currentTime();
-        dt = now - last;
-        
-        angle += 0.22 * dt;
-        
-        let R = Math.E**(createPoint() * angle * Math.PI);
-        
-        let wall = R >>> (1e2 - 0e0);
-        
-        let cmp = innerProduct(point, wall);
-        let color;
-        
-        if (cmp < 0) {
-          color = 0x00ff00;
-        } else if (cmp > 0) {
-          color = 0x0000ff;
-        } else {
-          color = 0xeeeeee;
+const Sketch = Algebra(() =>    
+    class {
+        constructor() {
+            this.point = createPoint();
+            this.angle = 0;
+            this.wall = null;
         }
-      
-        last = now; 
-        
-        return [
-          color,
-          point, "point",
+
+        update(dt) {
+            this.angle += 0.22 * dt;
+            const rotation = Math.E**(createPoint() * this.angle * Math.PI);
+            this.wall = rotation >>> (1e2 - 0e0);
+        }
+
+        render() {
+            let cmp = innerProduct(this.point, this.wall);
+            let color;
+            
+            if (cmp < 0) {
+                color = 0x00ff00;
+            } else if (cmp > 0) {
+                color = 0x0000ff;
+            } else {
+                color = 0xeeeeee;
+            }
+
+            return [
+                color,
+                this.point, "point",
+                
+                0xff0000,
+                this.wall, "wall"
+            ];
+        }
+    });
+
+const createCanvas = Algebra(() =>
+    sketch => {
+        const currentTime = () =>
+            performance.now() / 1000;
+
+        let last = currentTime();
+        let dt;
+
+        return this.graph(() => {
+            let now = currentTime();
+            dt = now - last;
+            
+            sketch.update(dt);
           
-          0xff0000,
-          wall, "wall"
-        ];
-      }, {
-        lineWidth: 4,
-        grid: true,
-        animate: true
-      });
+            last = now; 
+            return sketch.render();
+        }, {
+            lineWidth: 4,
+            grid: true,
+            animate: true
+        });
     });
 
 async function main() {
-    const canvas = createCanvas();
+    const sketch = new Sketch();
+    const canvas = createCanvas(sketch);
     canvas.id = 'canvas';
     canvas.style.width = null;
     canvas.style.height = null;
+    window.sketch = sketch;
     document.body.appendChild(canvas);
 }
 
