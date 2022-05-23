@@ -5,17 +5,28 @@ Algebra(2, 0, 1, () => {
     
   let last = currentTime();
   let dt;
+  
+  const lerp = (x, y, t) => 
+    (1 - t) * x + t * y;
 
   const createPoint = (x=0, y=0, z=0) =>
     !(x*1e1 + y*1e2 + z*1e3 + 1e0);
     
+  const createMotor = (from, to) => {
+    let m = 1 + (to / from);
+    return m.Normalized;
+  };
+    
   const innerProduct = (a, b) =>
-    0.5 * (a*b + b*a).Dual.s;
+    0.5 * (a*b + b*a);
+    
+  const project = (x, onto) =>
+   (x | onto) / onto;
     
   class Particle {
     constructor() {
       this.motor = 1;
-      this.vel = (1e1 - 0e0) ^ (1e2 - 3e0);
+      this.vel = (0.2e1 - 0e0) ^ (0.3e2 - 3e0);
     }
     
     positon() {
@@ -23,8 +34,8 @@ Algebra(2, 0, 1, () => {
     }
     
     forques() {
-      const gravity = !(~this.motor >>> -9.81e02);
-      const damping = !(-0.25 * this.vel);
+      const gravity = !(~this.motor >>> -2e02);
+      const damping = !(-0.55 * this.vel);
       return gravity + damping;
     }
     
@@ -45,7 +56,7 @@ Algebra(2, 0, 1, () => {
   
   class Wall {
     constructor() {
-      this.theWall = 1e2 + 1e0;
+      this.theWall = -0.2e1 + 1e2 + 1e0;
     }
     
     render() {
@@ -54,10 +65,16 @@ Algebra(2, 0, 1, () => {
     
     bounce(particle) {
       let pos = particle.positon();
-      let cmp = innerProduct(pos, this.theWall);
+      let cmp = innerProduct(pos, this.theWall).Dual.s;
       
       if (cmp <= 0) {
         particle.vel = this.theWall >>> particle.vel;
+        
+        let intersect = project(pos, this.theWall);
+        let correction = createMotor(pos, intersect);
+        correction = lerp(1, correction, 2);
+
+        particle.motor = particle.motor * correction;
       }
     }
   }
@@ -87,4 +104,3 @@ Algebra(2, 0, 1, () => {
     animate: true
   });
 });
-
