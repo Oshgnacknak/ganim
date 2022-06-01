@@ -40,7 +40,7 @@ Algebra(2, 0, 1, () => {
       position, "position",
       
       0xff0000,
-      target, "target"
+      target, "target (drag me)"
     ];
   }, {
     lineWidth: 4,
