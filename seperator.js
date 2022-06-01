@@ -13,7 +13,7 @@ Algebra(2, 0, 1, () => {
   const innerProduct = (a, b) =>
     0.5 * (a*b + b*a).Dual.s;
   
-  let point = createPoint();
+  let point = createPoint(0.5, 1);
   
   let angle = 0;
 
@@ -23,7 +23,7 @@ Algebra(2, 0, 1, () => {
     
     angle += 0.22 * dt;
     
-    let R = Math.E**(createPoint() * angle * Math.PI);
+    let R = Math.E**(createPoint(-0.4, 0.2) * angle * Math.PI);
     
     let wall = R >>> (1e2 - 0e0);
     
