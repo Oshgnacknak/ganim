@@ -1,4 +1,4 @@
-Algebra(2, 0, 1, () => {
+Algebra(3, 0, 1, () => {
 
   const currentTime = () =>
     performance.now() / 1000;
@@ -37,8 +37,11 @@ Algebra(2, 0, 1, () => {
   class Particle {
     constructor() {
       this.color = createColor(random(50, 255), random(50, 255), random(50, 255));
-      this.motor = 1;
+      this.motor = createMotor(
+        createPoint(), 
+        createPoint(random(-1, 1), random(-1, 1), random(-1, 1)));
       this.vel = 1e12;
+      this.appliedForques = 0;
     }
     
     position() {
@@ -50,10 +53,19 @@ Algebra(2, 0, 1, () => {
     }
     
     forques() {
-      const r = dist(sun, this.position());
-      const gravity   = 0.4 * ((~this.motor >>> sun) & createPoint()) / (r*r);
       const damping = !(-0.12 * this.vel);
-      return  gravity + damping;
+      const forques = this.appliedForques + damping;
+      this.appliedForques = 0;
+      return forques;
+    }
+    
+    applyForque(forque) {
+      this.appliedForques = forque + this.appliedForques;
+    }
+    
+    gravity(sun) {
+      const r = dist(sun, this.position());
+      this.applyForque(0.5 * ((~this.motor >>> sun) & createPoint()) / (r*r));
     }
     
     update(dt) {
@@ -71,24 +83,25 @@ Algebra(2, 0, 1, () => {
     }
   }
   
-  let particle = new Particle();
-  
-  let sun = createPoint(0, 1);
+  let p1 = new Particle();
+  let p2 = new Particle();
 
   return this.graph(() => {
     let now = currentTime();
     dt = now - last;
     
-    particle.update(dt);
-    console.log(dist(particle.position(), sun));
+    p1.gravity(p2.position());
+    p2.gravity(p1.position());
+
+
+    p1.update(dt);
+    p2.update(dt);
 
     last = now;
     
     return [
-      0xffff00, 
-      sun, "sun",
-      
-      ...particle.render()
+      ...p2.render(),
+      ...p1.render()
       ];
   }, {
     lineWidth: 4,
@@ -96,3 +109,4 @@ Algebra(2, 0, 1, () => {
     animate: true
   });
 });
+
