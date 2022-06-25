@@ -49,7 +49,7 @@ Algebra(3, 0, 1, () => {
     }
     
     render() {
-      return [this.color, this.position()];
+         return [this.color, this.position()];
     }
     
     forques() {
@@ -82,27 +82,34 @@ Algebra(3, 0, 1, () => {
       ];
     }
   }
-  
-  let p1 = new Particle();
-  let p2 = new Particle();
-
+    
+  let particles = [];
+  for (let i = 0; i < 40; i++) {
+    particles.push(new Particle());
+  }
   return this.graph(() => {
     let now = currentTime();
     dt = now - last;
     
-    p1.gravity(p2.position());
-    p2.gravity(p1.position());
-
-
-    p1.update(dt);
-    p2.update(dt);
-
+    for (let i = 0; i < particles.length-1; i++) {
+      for (let j = i+1; j < particles.length; j++) {
+        const p1 = particles[i];
+        const p2 = particles[j];
+        
+        p1.gravity(p2.position());
+        p2.gravity(p1.position());
+      }      
+    }
+    
+    for (const p of particles) {
+      p.update(dt);   
+    }
     last = now;
     
     return [
-      ...p2.render(),
-      ...p1.render()
-      ];
+      ...particles.map(p =>
+        p.render()).flat()
+    ];
   }, {
     lineWidth: 4,
     grid: true,
