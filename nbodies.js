@@ -35,13 +35,33 @@ Algebra(3, 0, 1, () => {
    (x | onto) / onto;
     
   class Particle {
-    constructor() {
-      this.color = createColor(random(50, 255), random(50, 255), random(50, 255));
-      this.motor = createMotor(
-        createPoint(), 
-        createPoint(random(-1, 1), random(-1, 1), random(-1, 1)));
+    constructor(options = {}) {
+      this.mass = options.mass || random(0.01, 2);
+      this.color = this.generateColor();
+      this.motor = this.generateMotor(options);
       this.vel = 1e12;
       this.appliedForques = 0;
+    }
+    
+    generateMotor(options) {
+      const d = 1.2;
+      const pos = options.pos || createPoint(
+          random(-d, d),
+          random(-d, d),
+          random(-d, d));
+          
+      return createMotor(
+        createPoint(),
+        pos
+      );
+    }
+    
+    generateColor() {
+      return createColor(
+        random(60 / this.mass, 300 / this.mass),
+        random(60 / this.mass, 300 / this.mass),
+        random(60 / this.mass, 300 / this.mass)
+      );
     }
     
     position() {
@@ -53,19 +73,21 @@ Algebra(3, 0, 1, () => {
     }
     
     forques() {
-      const damping = !(-0.12 * this.vel);
+      const damping = !(-0.6 * this.vel);
       const forques = this.appliedForques + damping;
       this.appliedForques = 0;
       return forques;
     }
     
     applyForque(forque) {
-      this.appliedForques = forque + this.appliedForques;
+      this.appliedForques = (forque / this.mass) + this.appliedForques;
     }
     
     gravity(sun) {
-      const r = dist(sun, this.position());
-      this.applyForque(0.5 * ((~this.motor >>> sun) & createPoint()) / (r*r));
+      const g = 0.1 * this.mass * sun.mass;
+      const r = dist(sun.position(), this.position());
+      console.log({ g, r })
+      this.applyForque(g * ((~this.motor >>> sun.position()) & createPoint()) / (r*r));
     }
     
     update(dt) {
@@ -84,9 +106,14 @@ Algebra(3, 0, 1, () => {
   }
     
   let particles = [];
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 5; i++) {
     particles.push(new Particle());
   }
+  particles.push(new Particle({ 
+    mass: 30,
+    pos: createPoint()
+  }));
+  
   return this.graph(() => {
     let now = currentTime();
     dt = now - last;
@@ -96,8 +123,8 @@ Algebra(3, 0, 1, () => {
         const p1 = particles[i];
         const p2 = particles[j];
         
-        p1.gravity(p2.position());
-        p2.gravity(p1.position());
+        p1.gravity(p2);
+        p2.gravity(p1);
       }      
     }
     

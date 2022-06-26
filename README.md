@@ -52,3 +52,7 @@ but instead of keeping then on the screen using solid walls,
 we calculate net-gravity between all the particles.
 This also, on average, keeps then evenly spread out
 around the center of the screen (their combined center of mass).
+
+As an addition to the animation above,
+particles now have mass making the
+simulation a bit more diverse.
