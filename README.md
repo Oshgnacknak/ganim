@@ -42,3 +42,13 @@ the velocity on the line we collide with
 to classical game mechanics.
 We also translate the point onto its
 projection in the line, to correct its position.
+
+## N-Body gravitational attraction
+
+- [nbodies.js](nbodies.js)
+
+Particles are taken from be previous example,
+but instead of keeping then on the screen using solid walls,
+we calculate net-gravity between all the particles.
+This also, on average, keeps then evenly spread out
+around the center of the screen (their combined center of mass).
