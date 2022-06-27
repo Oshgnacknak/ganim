@@ -71,10 +71,7 @@ Algebra(3, 0, 1, () => {
     render() {
          return [
            this.color,
-           this.position(),
-           
-          0x000000,
-          [attach, this.position()]
+           this.position()
          ];
     }
     
@@ -88,11 +85,6 @@ Algebra(3, 0, 1, () => {
     
     applyForque(forque) {
       this.appliedForques = (forque / this.mass) + this.appliedForques;
-    }
-    
-    spring(attach) {
-      const hooke = 3.2 * ((~this.motor >>> attach) & createPoint(0, 0, 0));
-      this.applyForque(hooke);
     }
     
     update(dt) {
@@ -109,21 +101,41 @@ Algebra(3, 0, 1, () => {
       ];
     }
   }
+  
+  class Spring {
+    constructor(particle, attach) {
+      this.strength = random(2, 4);
+      this.restLength = random(0.2, 2);
+      this.particle = particle;
+      this.attach = attach;
+    }
     
+    spring() {
+      const displacement = dist(this.attach, this.particle.position()) - this.restLength;
+      const hooke = displacement * this.strength * ((~this.particle.motor >>> this.attach) & createPoint(0, 0, 0));
+      this.particle.applyForque(hooke);
+    }
+    
+    render() {
+      return [
+        0x000000, this.attach,
+        [this.attach, this.particle.position()]
+      ];
+    }
+  }
+  
   let particles = [];
   for (let i = 0; i < 10; i++) {
     particles.push(new Particle());
   }
   
-  const attach = createPoint(0, 1, 0);
+  const spring = new Spring(particles[0], createPoint(0, 1, 0));
   
   return this.graph(() => {
     let now = currentTime();
     dt = now - last;
     
-    for (const p of particles) {
-      p.spring(attach);
-    }
+    spring.spring();
     
     for (const p of particles) {
       p.update(dt);   
@@ -135,8 +147,7 @@ Algebra(3, 0, 1, () => {
       ...particles.map(p =>
         p.render()).flat(),
         
-        0x000000,
-        attach
+        ...spring.render()
     ];
   }, {
     lineWidth: 2,
