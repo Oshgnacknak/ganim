@@ -56,3 +56,9 @@ around the center of the screen (their combined center of mass).
 As an addition to the animation above,
 particles now have mass making the
 simulation a bit more diverse.
+
+- [cloth.js](cloth.js)
+
+This time, particles are being attach to a fixed
+point and then chained together in a chain of springs.
+We use hooks law to calculate spring forces.
