@@ -32,7 +32,7 @@ Algebra(3, 0, 1, () => {
     (a & b).Length;
     
   const project = (x, onto) =>
-   (x | onto) / onto;
+    (x | onto) / onto;
     
   class Particle {
     constructor(options = {}) {
@@ -86,7 +86,6 @@ Algebra(3, 0, 1, () => {
     gravity(sun) {
       const g = 0.1 * this.mass * sun.mass;
       const r = dist(sun.position(), this.position());
-      console.log({ g, r })
       this.applyForque(g * ((~this.motor >>> sun.position()) & createPoint()) / (r*r));
     }
     
