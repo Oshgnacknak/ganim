@@ -118,7 +118,7 @@ Algebra(3, 0, 1, () => {
     
     render() {
       return [
-        0x000000, this.attach,
+        0x000000,
         [this.attach, this.particle.position()]
       ];
     }
@@ -153,7 +153,10 @@ Algebra(3, 0, 1, () => {
         p.render()).flat(),
         
       ...springs.map(s =>
-        s.render()).flat()
+        s.render()).flat(),
+      
+      0x000000,
+      attach
     ];
   }, {
     lineWidth: 2,
