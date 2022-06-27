@@ -36,7 +36,7 @@ Algebra(3, 0, 1, () => {
     
   class Particle {
     constructor(options = {}) {
-      this.mass = options.mass || random(0.3, 2);
+      this.mass = options.mass || 1;
       this.color = this.generateColor();
       this.motor = this.generateMotor(options);
       this.vel = 1e12;
@@ -76,8 +76,8 @@ Algebra(3, 0, 1, () => {
     }
     
     forques() {
-      const damping = !(-0.6 * this.vel);
-      const gravity = this.mass * !(~this.motor >>> -2.2e02);
+      const damping = !(-10 * this.vel);
+      const gravity = this.mass * !(~this.motor >>> -4.2e02);
       const forques = this.appliedForques + gravity + damping;
       this.appliedForques = 0;
       return forques;
@@ -104,8 +104,8 @@ Algebra(3, 0, 1, () => {
   
   class Spring {
     constructor(particle, getAttach) {
-      this.strength = random(2, 4);
-      this.restLength = random(0.2, 1.3);
+      this.strength = 25;
+      this.restLength = 0.05;
       this.particle = particle;
       this.getAttach = getAttach;
     }
@@ -127,11 +127,16 @@ Algebra(3, 0, 1, () => {
   
   let particles = [];
   let springs = [];
-  const attach = createPoint(random(-1, 1), 1, random(-1, 1));
+  const attach = createPoint(0, 2, 0);
   for (let i = 0; i < 10; i++) {
     const p = new Particle();
     particles.push(p);
-    springs.push(new Spring(p, () => attach));
+    
+    const getAttach = i == 0
+      ? () => attach
+      : () => particles[i-1].position();
+    
+    springs.push(new Spring(p, getAttach));
 }
   
   
