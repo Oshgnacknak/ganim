@@ -36,7 +36,7 @@ Algebra(3, 0, 1, () => {
     
   class Particle {
     constructor(options = {}) {
-      this.mass = options.mass || random(0.01, 2);
+      this.mass = options.mass || random(0.3, 2);
       this.color = this.generateColor();
       this.motor = this.generateMotor(options);
       this.vel = 1e12;
@@ -78,7 +78,7 @@ Algebra(3, 0, 1, () => {
     forques() {
       const damping = !(-0.6 * this.vel);
       const gravity = this.mass * !(~this.motor >>> -2.2e02);
-      const forques = this.appliedForques + 0 + damping;
+      const forques = this.appliedForques + gravity + damping;
       this.appliedForques = 0;
       return forques;
     }
@@ -105,7 +105,7 @@ Algebra(3, 0, 1, () => {
   class Spring {
     constructor(particle, attach) {
       this.strength = random(2, 4);
-      this.restLength = random(0.2, 2);
+      this.restLength = random(0.2, 1.3);
       this.particle = particle;
       this.attach = attach;
     }
@@ -125,17 +125,22 @@ Algebra(3, 0, 1, () => {
   }
   
   let particles = [];
+  let springs = [];
+  const attach = createPoint(random(-1, 1), 1, random(-1, 1));
   for (let i = 0; i < 10; i++) {
-    particles.push(new Particle());
-  }
+    const p = new Particle();
+    particles.push(p);
+    springs.push(new Spring(p, attach));
+}
   
-  const spring = new Spring(particles[0], createPoint(0, 1, 0));
   
   return this.graph(() => {
     let now = currentTime();
     dt = now - last;
     
-    spring.spring();
+    for (const s of springs) {
+      s.spring();   
+    }
     
     for (const p of particles) {
       p.update(dt);   
@@ -147,7 +152,8 @@ Algebra(3, 0, 1, () => {
       ...particles.map(p =>
         p.render()).flat(),
         
-        ...spring.render()
+      ...springs.map(s =>
+        s.render()).flat()
     ];
   }, {
     lineWidth: 2,
