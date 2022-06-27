@@ -103,23 +103,24 @@ Algebra(3, 0, 1, () => {
   }
   
   class Spring {
-    constructor(particle, attach) {
+    constructor(particle, getAttach) {
       this.strength = random(2, 4);
       this.restLength = random(0.2, 1.3);
       this.particle = particle;
-      this.attach = attach;
+      this.getAttach = getAttach;
     }
     
     spring() {
-      const displacement = dist(this.attach, this.particle.position()) - this.restLength;
-      const hooke = displacement * this.strength * ((~this.particle.motor >>> this.attach) & createPoint(0, 0, 0));
+      const attach = this.getAttach();
+      const displacement = dist(attach, this.particle.position()) - this.restLength;
+      const hooke = displacement * this.strength * ((~this.particle.motor >>> attach) & createPoint(0, 0, 0));
       this.particle.applyForque(hooke);
     }
     
     render() {
       return [
         0x000000,
-        [this.attach, this.particle.position()]
+        [this.getAttach(), this.particle.position()]
       ];
     }
   }
@@ -130,7 +131,7 @@ Algebra(3, 0, 1, () => {
   for (let i = 0; i < 10; i++) {
     const p = new Particle();
     particles.push(p);
-    springs.push(new Spring(p, attach));
+    springs.push(new Spring(p, () => attach));
 }
   
   
