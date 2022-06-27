@@ -127,8 +127,8 @@ Algebra(3, 0, 1, () => {
   
   let particles = [];
   let springs = [];
-  const attach = createPoint(0, 2, 0);
-  for (let i = 0; i < 10; i++) {
+  const attach = createPoint(0, 3, 0);
+  for (let i = 0; i < 30; i++) {
     const p = new Particle();
     particles.push(p);
     
@@ -167,6 +167,7 @@ Algebra(3, 0, 1, () => {
   }, {
     lineWidth: 2,
     grid: true,
-    animate: true
+    animate: true,
+    scale: 0.5
   });
 });
