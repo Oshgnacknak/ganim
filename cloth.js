@@ -69,7 +69,13 @@ Algebra(3, 0, 1, () => {
     }
     
     render() {
-         return [this.color, this.position()];
+         return [
+           this.color,
+           this.position(),
+           
+          0x000000,
+          [attach, this.position()]
+         ];
     }
     
     forques() {
@@ -133,7 +139,7 @@ Algebra(3, 0, 1, () => {
         attach
     ];
   }, {
-    lineWidth: 4,
+    lineWidth: 2,
     grid: true,
     animate: true
   });
