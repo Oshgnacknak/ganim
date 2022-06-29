@@ -45,6 +45,7 @@ projection in the line, to correct its position.
 
 ## N-Body gravitational attraction
 
+- <https://enkimute.github.io/ganja.js/examples/coffeeshop.html#gAFDfzlcX>
 - [nbodies.js](nbodies.js)
 
 Particles are taken from be previous example,
