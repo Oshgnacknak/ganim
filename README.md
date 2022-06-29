@@ -9,6 +9,7 @@ The following animations have been implemented so far:
 
 ## Steering Behavior: Seek a target
 
+- <https://enkimute.github.io/ganja.js/examples/coffeeshop.html#gYwqpILzE>
 - [steering.js](steering.js)
 
 Inspired by [Example 6.1: Seeking a target](https://natureofcode.com/book/chapter-6-autonomous-agents/#chapter06_example1).
@@ -17,6 +18,7 @@ we are moving a point towards a target point.
 
 ## A line as a separator
 
+- <https://enkimute.github.io/ganja.js/examples/coffeeshop.html#LkDjgnEWX>
 - [separator.js](separator.js)
 
 Dotting a point with a line gives us information
@@ -28,6 +30,7 @@ of the line are not constrained.
 
 ## Bouncing on a line
 
+- <https://enkimute.github.io/ganja.js/examples/coffeeshop.html#CNbzpB2DQ>
 - [bounce.js](bounce.js)
 
 A particle stores position and velocity,
@@ -60,6 +63,7 @@ simulation a bit more diverse.
 
 ## Cloth simulation
 
+- <https://enkimute.github.io/ganja.js/examples/coffeeshop.html#es4s1gvTj>
 - [cloth.js](cloth.js)
 
 This time, particles are being attach to a fixed
