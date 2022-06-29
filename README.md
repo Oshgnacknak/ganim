@@ -58,6 +58,8 @@ As an addition to the animation above,
 particles now have mass making the
 simulation a bit more diverse.
 
+## Cloth simulation
+
 - [cloth.js](cloth.js)
 
 This time, particles are being attach to a fixed
