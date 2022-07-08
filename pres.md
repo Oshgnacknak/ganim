@@ -65,3 +65,34 @@ motor = lerp(motor, desired, dt);
 motor = lerp(motor, 1, damping);
 position = motor >>> position;
 ```
+
+# Simulating Physical Motion
+
+## May the Forque Be with You
+
+- About classical physics in 2D PGA
+
+- Also in part written by Steven De Keninck
+
+- <https://bivector.net/doc.html>
+
+- tldr: <https://enki.ws/ganja.js/examples/pga_dyn.html>
+
+## Why "Forque"?
+
+- With GA, force and torque can be expressed in one multivector
+
+- Forques encode their origin and apply accordingly
+
+## Motion in PGA
+
+- Motors represent position (displacement and orientation)
+
+- Velocity is a line in the direction of motion
+
+### Equations of Motion
+
+\begin{align*}
+\dot{M} &= - \frac12 M B \\
+\dot{B} &= -(B^* \times B)^{-*} & \text{where }a \times b = \frac12 (ab - ba)
+\end{align*}
