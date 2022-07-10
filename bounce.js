@@ -25,9 +25,6 @@ Algebra(2, 0, 1, () => {
     return m.Normalized;
   };
     
-  const innerProduct = (a, b) =>
-    0.5 * (a*b + b*a);
-    
   const project = (x, onto) =>
    (x | onto) / onto;
     
@@ -78,7 +75,7 @@ Algebra(2, 0, 1, () => {
     
     bounce(particle) {
       let pos = particle.positon();
-      let cmp = innerProduct(pos, this.theWall).Dual.s;
+      let cmp = (pos & this.theWall).s;
       
       if (cmp < 0) {
         particle.vel = this.theWall >>> particle.vel;
