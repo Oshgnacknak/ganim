@@ -78,21 +78,78 @@ position = motor >>> position;
 
 - tldr: <https://enki.ws/ganja.js/examples/pga_dyn.html>
 
-## Why "Forque"?
-
-- With GA, force and torque can be expressed in one multivector
-
-- Forques encode their origin and apply accordingly
-
 ## Motion in PGA
 
-- Motors represent position (displacement and orientation)
+- Let $M$ be our position motor
 
-- Velocity is a line in the direction of motion
+- $F$ the sum Forques
 
-### Equations of Motion
+- And let $V$ be our Velocity
 
 \begin{align*}
-\dot{M} &= - \frac12 M B \\
-\dot{B} &= -(B^* \times B)^{-*} & \text{where }a \times b = \frac12 (ab - ba)
+\dot{M} &= - \frac12 M V \\
+\dot{V} &= (F - V^* \times V)^{-*} & \text{where }a \times b = \frac12 (ab - ba)
 \end{align*}
+
+## Motion in PGA Code
+
+```js
+class Particle {
+  update(dt) {
+    const [dm, dv] = this.deriv();
+    this.motor = this.motor + dt * dm;
+    this.vel = this.vel + dt * dv;
+  }
+   
+  deriv() {
+    const B = this.vel;
+    return [
+      -0.5 * this.motor * this.vel,
+      (this.forques() -
+        0.5 * (B.Dual*B - B*B.Dual)).UnDual
+    ];
+  }
+  // ...
+}
+```
+
+## Some Example Forques
+
+- Gravity $F_g = (\widetilde{M} (g e_{02}) M)^*$
+
+- Damping $F_d = (- d V)^*$
+
+```js
+class Particle {
+  forques() {
+    const gravity = !(~this.motor >>> -5e02);
+    const damping = !(-0.12 * this.vel);
+    return gravity + damping;
+  }
+  // ...
+}
+```
+
+## Collision detection in PGA
+
+- Point $P$ is on the normal side of a Hyperplane $H$ iff
+$$
+    P \vee H > 0
+$$
+
+### In Code
+
+```js
+class Wall {
+  bounce(particle) {
+    let pos = particle.positon();
+    let cmp = (pos & this.theWall).s;
+    
+    if (cmp < 0) {
+      particle.vel = this.theWall >>> particle.vel;
+      // ...
+    }
+  }
+  // ...
+}
+```
