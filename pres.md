@@ -80,11 +80,11 @@ position = motor >>> position;
 
 ## Motion in PGA
 
-- Let $M$ be our position motor
+- Let $M$ be the position motor
 
 - $F$ the sum Forques
 
-- And let $V$ be our Velocity
+- And let $V$ be the Velocity
 
 \begin{align*}
 \dot{M} &= - \frac12 M V \\
@@ -137,8 +137,6 @@ $$
     P \vee H > 0
 $$
 
-### In Code
-
 ```js
 class Wall {
   bounce(particle) {
@@ -149,6 +147,49 @@ class Wall {
       particle.vel = this.theWall >>> particle.vel;
       // ...
     }
+  }
+  // ...
+}
+```
+
+## Gravitation between Particles
+
+- Let $P$ be the sun, $r$ be the distance and let $m_1, m_2$ be masses
+
+$$
+    F_g = \frac{g m_1 m_2}{r^2} (\widetilde{M} P M \vee e_0)
+$$
+
+```js
+class Particle {
+  gravity(sun) {
+    const g = 0.1 * this.mass * sun.mass;
+    const r = dist(sun.position(), this.position());
+    this.applyForque(g * ((~this.motor >>> sun.position())
+      & createPoint()) / (r*r));
+  }
+  // ...
+}
+```
+
+## Hook's Law  
+
+- Let $P$ be the attachment, $d$ be the displacement and let $k$ be the spring constant
+
+$$
+    F_s = d k (\widetilde{M} P M \vee e_0)
+$$
+
+```js
+class Spring {
+  spring() {
+    const attach = this.getAttach();
+    const displacement = dist(attach,
+      this.particle.position()) - this.restLength;
+    const hooke = displacement * this.strength * (
+        (~this.particle.motor >>> attach)
+            & createPoint(0, 0, 0));
+    this.particle.applyForque(hooke);
   }
   // ...
 }
