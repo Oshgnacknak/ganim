@@ -194,3 +194,65 @@ class Spring {
   // ...
 }
 ```
+
+# Using PGA with our own framework
+
+- Let's just generate PGA with Gaalop's precompiler
+
+## The multivector
+
+```cpp
+struct MV {
+    coeff coeffs[8] = { 0 };
+
+    coeff& operator[](size_t);
+}
+```
+
+## Implementing addition
+
+```cpp
+
+MV operator+(MV a, MV b) {
+#pragma gpc begin
+    gaalop_add_a = mv_from_array(a);
+    gaalop_add_b = mv_from_array(b);
+#pragma clucalc begin
+    ? gaalop_add_res = gaalop_add_a + gaalop_add_b;
+#pragma clucalc end
+    MV mv;
+    mv = mv_to_array(gaalop_add_res);
+    return mv;
+#pragma gpc end
+}
+```
+
+## The Rest is pretty much the same
+
+```cpp
+struct Particle {
+    void update(double dt) {
+        MV dm = -0.5 * motor * vel;
+        MV dv = !(forques - 0.5
+          * (!vel * vel - vel * !vel));
+
+        motor += dt * dm;
+        vel += dt * dv;
+
+        forques = { 0 };
+    }
+    // ...
+}
+```
+
+- However, we can always optimize with the precompiler
+
+# Thanks for Listening!
+
+- Any questions?
+
+- Full Ganja examples: <https://github.com/Oshgnacknak/ganim>
+
+- PDF with slides as release
+
+- C++ code: <https://github.com/Oshgnacknak/ganim-cpp/tree/world-gravity>
