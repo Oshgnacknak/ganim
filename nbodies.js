@@ -13,9 +13,6 @@ Algebra(3, 0, 1, () => {
     
   let last = currentTime();
   let dt;
-  
-  const lerp = (x, y, t) => 
-    (1 - t) * x + t * y;
 
   const createPoint = (x=0, y=0, z=0) =>
     !(x*1e1 + y*1e2 + z*1e3 + 1e0);
@@ -25,14 +22,8 @@ Algebra(3, 0, 1, () => {
     return m.Normalized;
   };
     
-  const innerProduct = (a, b) =>
-    0.5 * (a*b + b*a);
-    
   const dist = (a, b) =>
     (a & b).Length;
-    
-  const project = (x, onto) =>
-    (x | onto) / onto;
     
   class Particle {
     constructor(options = {}) {
