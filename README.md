@@ -18,7 +18,7 @@ we are moving a point towards a target point.
 
 ## A line as a separator
 
-- <https://enkimute.github.io/ganja.js/examples/coffeeshop.html#LkDjgnEWX>
+- <https://enkimute.github.io/ganja.js/examples/coffeeshop.html#P-t3NNo1Q>
 - [separator.js](separator.js)
 
 Dotting a point with a line gives us information
@@ -30,7 +30,7 @@ of the line are not constrained.
 
 ## Bouncing on a line
 
-- <https://enkimute.github.io/ganja.js/examples/coffeeshop.html#CNbzpB2DQ>
+- <https://enkimute.github.io/ganja.js/examples/coffeeshop.html#-vZHRz6fW>
 - [bounce.js](bounce.js)
 
 A particle stores position and velocity,
@@ -48,7 +48,7 @@ projection in the line, to correct its position.
 
 ## N-Body gravitational attraction
 
-- <https://enkimute.github.io/ganja.js/examples/coffeeshop.html#gAFDfzlcX>
+- <https://enkimute.github.io/ganja.js/examples/coffeeshop.html#oBgrZxcEt>
 - [nbodies.js](nbodies.js)
 
 Particles are taken from be previous example,
@@ -63,7 +63,7 @@ simulation a bit more diverse.
 
 ## Cloth simulation
 
-- <https://enkimute.github.io/ganja.js/examples/coffeeshop.html#es4s1gvTj>
+- <https://enkimute.github.io/ganja.js/examples/coffeeshop.html#QlGVWZePp>
 - [cloth.js](cloth.js)
 
 This time, particles are being attach to a fixed
