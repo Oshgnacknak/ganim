@@ -67,8 +67,8 @@ Algebra(3, 0, 1, () => {
     }
     
     forques() {
-      const damping = !(-10 * this.vel);
-      const gravity = this.mass * !(~this.motor >>> -4.2e02);
+      const damping = !(-5 * this.vel);
+      const gravity = this.mass * !(~this.motor >>> -6.2e02);
       const forques = this.appliedForques + gravity + damping;
       this.appliedForques = 0;
       return forques;
@@ -95,8 +95,8 @@ Algebra(3, 0, 1, () => {
   
   class Spring {
     constructor(particle, getAttach) {
-      this.strength = 25;
-      this.restLength = 0.05;
+      this.strength = 15;
+      this.restLength = 0.3;
       this.particle = particle;
       this.getAttach = getAttach;
     }
@@ -119,7 +119,7 @@ Algebra(3, 0, 1, () => {
   let particles = [];
   let springs = [];
   const attach = createPoint(0, 3, 0);
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 10; i++) {
     const p = new Particle();
     particles.push(p);
     
