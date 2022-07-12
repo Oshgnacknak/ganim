@@ -16,11 +16,11 @@ date: \today
 
 ## Ganja Coffeeshop
 
-- Write Ganja examples in your browser
+- Write Ganja examples in our browser
 
 - <https://enkimute.github.io/ganja.js>
 
-# My First Example
+# Our First Example
 
 ## Render a Point
 
