@@ -8,10 +8,6 @@ Algebra(2, 0, 1, () => {
 
   const createPoint = (x=0, y=0, z=0) =>
     !(x*1e1 + y*1e2 + z*1e3 + 1e0);
-
-  
-  const innerProduct = (a, b) =>
-    0.5 * (a*b + b*a).Dual.s;
   
   let point = createPoint(0.5, 1);
   
@@ -27,7 +23,7 @@ Algebra(2, 0, 1, () => {
     
     let wall = R >>> (1e2 - 0e0);
     
-    let cmp = innerProduct(point, wall);
+    let cmp = (point & wall).s;
     let color;
     
     if (cmp < 0) {
